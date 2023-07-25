@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <!-- TO DO: Change name! -->
-    <title>App Name</title>
+    <title>Rearward</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
@@ -33,8 +32,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand" href="/index.html">
                     <img src="/img/Cadence-Eva-mark-transparent.png" width="30" alt="Cadence Eva Mark">
-                    <!-- TO DO: Change name! -->
-                    App Name
+                    Rearward
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -47,15 +45,13 @@
                             <a class="nav-link text-accent" href="/index.html">Home</a>
                         </li>
                         <li class="nav-item">
-                            <!-- TO DO: Change name! -->
                             <a class="nav-link text-accent" href="/app.html">The App</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-accent active" aria-current="page" href="/code.html">The Code</a>
                         </li>
                         <li class="nav-item">
-                            <!-- TO DO: Change to repo of app -->
-                            <a class="nav-link text-accent" href="https://github.com/eva-grimm">The Repo</a>
+                            <a class="nav-link text-accent" href="https://github.com/eva-grimm/rearward">The Repo</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-accent" href="https://cadence-eva.netlify.app/">About</a>
@@ -76,25 +72,109 @@
                 <h2 class="border-bottom border-2 border-dark">The Code</h2>
                 <pre class="line-numbers">
                     <code class="language-js">
-                        function displayMessage() {
-                            let message = document.getElementById("message").value;
+                        function getValues() {
+                            let userString = document.getElementById('userString').value;
+                            let reversedString = reverseWithRecursion(userString);
+                            displayString(reversedString);
+                        }
                         
-                            Swal.fire(
-                                {
-                                    backdrop: false,
-                                    title: 'App Name',
-                                    text: message
-                                }
-                            );
+                        function reverseWithRecursion(userString, reversedString = '') {
+                            return userString.length == reversedString.length ? reversedString : reverseWithRecursion(userString, userString[reversedString.length] + reversedString);
+                        }
+                        
+                        function basicReverseString(userString) {
+                            let reversedString = '';
+                            for (let i = userString.length - 1; i >= 0; i--) reversedString += userString[i];
+                            return reversedString;
+                        }
+                        
+                        function reverseWithCharAt(userString) {
+                            let reversedString = '';
+                            for (let i = userString.length - 1; i >= 0; i--) reversedString += userString.charAt(i);
+                            return reversedString;
+                        }
+                        
+                        function reverseWithArray(userString) {
+                            let userArray = userString.split('');
+                            let reversedArray = [];
+                            let reversedString = '';
+                            for (let i = 0; i &lt; userArray.length; i++) reversedArray.unshift(userArray[i]);
+                            for (let i = 0; i &lt; reversedArray.length; i++) reversedString += reversedArray[i];
+                            return reversedString;
+                        }
+                        
+                        function displayString(reversedString) {
+                            document.getElementById('results').textContent = reversedString;
+                            document.getElementById('alert').classList.remove('invisible')
                         }
                     </code>
                 </pre>
             </div>
             <div class="col-12 col-lg-4">
-                <p>The code is structured in one function</p>
-                <h5>displayMessage</h5>
+                <p>The code is structured in three functions, but I've provided alternative solutions of the middle
+                    function. Let's dive in.</p>
+                <h5>getValues()</h5>
                 <p>
-                    Shows a SweetAlert with the value of the <code>message</code> variable.
+                    This function uses no parameters and is designed to retrieve the user's string and control the flow
+                    of the overall applet. It begins by retrieving the provided user string and assigning it to
+                    userString. It calls reverseWithRecursion(), using userString as an argument and assigning the
+                    returned value to reversedString. Finally, the function calls displayString(), using reversedString
+                    as an argument.
+                </p>
+                <h5>reverseWithRecursion()</h5>
+                <p>
+                    The meat of the applet, this function is recursive and uses userString as a parameter and a blank
+                    string, reversedString, as a default parameter. Because reversedString initially has a length of 0
+                    but will steadily increase as we build it up with letters from userString, we can use reversedString
+                    as an index to guide the function's recursion.
+                </p>
+                <p>
+                    The function begins by checking if userString and reversedString have the same length. If they do
+                    (the end condition of the recursion), then it returns reversedString. Otherwise, it calls itself
+                    recursively, passing userString as the first argument, but it's the second argument it passes that's
+                    key to how the function's recursion works. The second argument the function passes when calling
+                    itself recursively is the letter located in userString at the index of reversedString's length
+                    <i>plus</i> reversedString.
+                </p>
+                <p>
+                    To see what this all looks like in action, let's presume userString's value is 'bye':
+                <ul>
+                    <li>
+                        The function first checks if reversedString's length (currently 0) is equal to userString's
+                        length (3). It isn't, so the function calls itself. The first argument is 'bye', and the second
+                        argument is 'b' because the letter in userString at the index of reversedString's length (again,
+                        currently 0) is 'b'.
+                    </li>
+                    <li>
+                        The recursively called function checks if reversedString's length (currently 1) is equal to
+                        userString's length (3). It isn't, so the function calls itself. The first argument is 'bye',
+                        the same as before. The second argument is 'yb' because the letter in userString at the index of
+                        reversedString's length (again, currently 1) is 'y', and the second argument is that letter
+                        <i>plus</i> reversedString (currently 'b').
+                    </li>
+                    <li>
+                        The next instance of the recursive function performs the length checks again (2 is not 3), and
+                        calls itself once again, passing 'bye' and 'eyb'. The <i>next (and final)</i> instance of the
+                        recursion performs the length checks one last time and finds the lengths are equal (3 == 3).
+                        Because this is the case, it returns 'eyb', which is passed up through the chain until finally
+                        being passed back to the original getValues() function.
+                    </li>
+                </ul>
+                </p>
+                <h5>Alternatives to reverseWithRecursion()</h5>
+                <p>
+                    A string can be reversed without recursion by using for-loops. Alternative solutions that use
+                    for-loops have been provided: basicReverseString(), reverseWithCharAt(), and reverseWithArray(). To
+                    use any of these solutions, getValues() must be changed to call the desired function instead (the
+                    same argument is used for all solutions).
+                </p>
+                <h5>displayString()</h5>
+                <p>
+                    This function uses reversedString as a parameter and is designed to display reversedString on the
+                    applet page as part of a success message the function reveals. It begins by retrieving the HTML
+                    element 'results' and changing its text content with DOM manipulation to match reversedString. It
+                    then retrieves the HTML element 'alert', calls its list of classes, and removes the cass
+                    'invisible', which has been keeping the success message hidden.
                 </p>
             </div>
         </div>
